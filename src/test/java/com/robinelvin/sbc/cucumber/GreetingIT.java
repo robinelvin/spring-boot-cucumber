@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationContextLoader;
 import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.Assert.assertEquals;
@@ -25,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 //@ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = {TestConfiguration.class, Neo4jTestConfiguration.class})
 @ContextConfiguration(classes = {TestConfiguration.class, Neo4jTestConfiguration.class})
 @WebIntegrationTest(randomPort = true)
+@DirtiesContext
 public class GreetingIT extends FluentCucumberTest implements En {
 
     private WebDriver webDriver = new PhantomJSDriver();
