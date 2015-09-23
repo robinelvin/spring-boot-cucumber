@@ -1,0 +1,89 @@
+group 'com.robinelvin'
+version '1.0-SNAPSHOT'
+def springVersion = '4+'
+def springTestVersion = '4.1.6.RELEASE'
+def springBootVersion = '1.2.5.RELEASE'
+def neo4jVersion = "2.2.3"
+def springDataNeo4jVersion = '4.0.0.BUILD-SNAPSHOT'
+def springOAuthVersion = '2.0.7.RELEASE'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'maven'
+apply plugin: 'spring-boot'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+repositories {
+    mavenCentral()
+    maven { url "https://repo.spring.io/libs-release" }
+    maven { url "https://repo.spring.io/libs-snapshot" }
+    maven { url "https://m2.neo4j.org/content/repositories/releases" }
+    maven { url "https://m2.neo4j.org/content/repositories/snapshots" }
+    maven { url "http://repo1.maven.org/maven2/info/cukes/" }
+}
+
+configurations {
+    providedRuntime
+    all {
+        exclude group: "commons-logging", module: "commons-logging"
+    }
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-parent:$springBootVersion"
+    compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion") {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile("org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion")
+
+    compile "org.springframework.security:spring-security-web:$springVersion"
+    compile "org.springframework.security:spring-security-config:$springVersion"
+    compile "org.springframework.security.oauth:spring-security-oauth2:$springOAuthVersion"
+
+    compile "org.neo4j.app:neo4j-server:$neo4jVersion"
+    compile group: 'org.neo4j.test', name: 'neo4j-harness', version: "$neo4jVersion"
+    compile "org.springframework.data:spring-data-neo4j:$springDataNeo4jVersion"
+
+    compile "org.thymeleaf:thymeleaf:2.1.2.RELEASE"
+    compile "org.thymeleaf:thymeleaf-spring4:2.1.2.RELEASE"
+    compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE"
+    compile "net.sourceforge.nekohtml:nekohtml:1.9.21"
+
+
+    testCompile "org.springframework.security:spring-security-test:$springVersion"
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile "com.jayway.jsonpath:json-path:2.0.0"
+    testCompile "org.springframework:spring-test:$springVersion"
+    testCompile group: 'org.neo4j', name: 'neo4j-kernel', version: '$neo4jVersion', classifier: 'tests'
+    testCompile group: 'org.neo4j.app', name: 'neo4j-server', version: '$neo4jVersion', classifier: 'tests'
+    testCompile group: 'org.neo4j', name: 'neo4j-ogm', version: '1+', classifier: 'tests'
+    testCompile group: 'org.neo4j.test', name: 'neo4j-harness', version: "$neo4jVersion", classifier: 'tests'
+    testCompile group: 'org.springframework.data', name: 'spring-data-neo4j', version: "$springDataNeo4jVersion", classifier: 'tests'
+
+    testCompile group: 'info.cukes', name: 'cucumber-java8', version: '1.2.3'
+    testCompile group: 'info.cukes', name: 'cucumber-junit', version: '1.2.3'
+    testCompile group: 'info.cukes', name: 'cucumber-spring', version: '1.2.3'
+    //testCompile group: 'com.github.detro', name: 'phantomjsdriver', version: '1.2.0'
+    testCompile group: 'com.codeborne', name: 'phantomjsdriver', version: '1.2.1'
+    testCompile group: 'org.fluentlenium', name: 'fluentlenium-assertj', version: '0.10.3'
+    testCompile group: 'org.fluentlenium', name: 'fluentlenium-cucumber', version: '0.10.3'
+
+    // Bridge logging from JCL to SLF4j
+    compile 'org.slf4j:jcl-over-slf4j:1.7.12'
+
+    // Logback
+    compile 'ch.qos.logback:logback-classic:1.1.3'
+}
